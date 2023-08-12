@@ -16,7 +16,7 @@ router.post('/upload', async (req, res)=> {
     );
 
     const response = await axios.post(
-        "https://dress-me-up-backend-red.vercel.app/clothes/upload'",
+        "https://dress-me-up-backend-red.vercel.app/clothes/upload",
         { url: resultCloudinary.secure_url }
     );
 
