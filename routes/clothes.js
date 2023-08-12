@@ -20,7 +20,7 @@ router.post('/upload', async (req, res)=> {
         { url: resultCloudinary.secure_url }
     );
 
-    res.json({ success: true, response: response.data });
+    res.json({ success: true, url: response.data.url });
 } catch (error) {
     res.json({ success: false, error: error.message });
 }
