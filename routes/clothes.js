@@ -21,7 +21,7 @@ router.post('/upload', upload.single('photoFromFront'), async (req, res) => {
           folder: 'dress-me-up', // Vous pouvez personnaliser le dossier sur Cloudinary
           use_filename: true
       });
-
+      console.log("resultCloudinary", resultCloudinary)
       // Supprimer le fichier temporaire
       fs.unlinkSync(req.file.path);
 
