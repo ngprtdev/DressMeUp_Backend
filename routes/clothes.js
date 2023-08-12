@@ -11,14 +11,21 @@ const Clothe = require('../models/clothes');
 // Pour ajout de la photo prise à l'écran CreatheClotheE
 // POST avec push en DB + ajout au store
 router.post('/upload', async (req, res)=> {
-  try {
-    const resultCloudinary = await cloudinary.uploader.upload(req.files.photoFromFront.tempFilePath);
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(req.files.photoFromFront.tempFilePath);
+ 
+  if(!resultMove) {
+    
+      const resultCloudinary = await cloudinary.uploader.upload(req.files.photoFromFront.tempFilePath);
 
-    res.json({ success: true, url: resultCloudinary.secure_url });
-} catch (error) {
-    res.json({ success: false, error: error.message });
-}
-});
+     
+      res.json({ result: true, url: resultCloudinary.secure_url });    }
+      else {
+    res.json({ result: false, error: resultMove });
+  }
+  fs.unlinkSync(photoPath);
+
+})
 
 // Pour la page de finalisation de création du vêtement
 // POST avec push en DB + ajout au store
