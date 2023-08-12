@@ -11,12 +11,12 @@ const Clothe = require('../models/clothes');
 // Pour ajout de la photo prise à l'écran CreatheClotheE
 // POST avec push en DB + ajout au store
 router.post('/upload', async (req, res)=> {
-  const photoPath = `./tmp/${uniqid()}.jpg`;
-  const resultMove = await req.files.photoFromFront.mv(req.files.photoFromFront.tempFilePath);
+  const photoPath = req.files.photoFromFront.tempFilePath
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
  
   if(!resultMove) {
     
-      const resultCloudinary = await cloudinary.uploader.upload(req.files.photoFromFront.tempFilePath);
+      const resultCloudinary = await cloudinary.uploader.upload(photoPath);
 
      
       res.json({ result: true, url: resultCloudinary.secure_url });    }
