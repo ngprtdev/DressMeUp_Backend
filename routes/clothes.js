@@ -13,7 +13,7 @@ const Clothe = require('../models/clothes');
 router.post('/upload', async (req, res)=> {
   try {
     const resultCloudinary = await cloudinary.uploader.upload(
-        req.files.photoFromFront.tempFilePath, // Utilisez le chemin temporaire directement
+        req.files.photoData.tempFilePath // Utilisez le chemin temporaire directement
     );
 
     const response = await axios.post(
