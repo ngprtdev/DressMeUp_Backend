@@ -14,7 +14,7 @@ router.post('/upload', async (req, res)=> {
   try {
     const resultCloudinary = await cloudinary.uploader.upload(
         req.files.photoFromFront.tempFilePath    );
-
+      console.log("resultCloudinary côté back ",resultCloudinary)
     const response = await axios.post(
         "https://dress-me-up-backend-red.vercel.app/clothes/upload",
         { url: resultCloudinary.secure_url }
