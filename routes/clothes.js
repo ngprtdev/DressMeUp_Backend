@@ -12,15 +12,9 @@ const Clothe = require('../models/clothes');
 // POST avec push en DB + ajout au store
 router.post('/upload', async (req, res)=> {
   try {
-    const resultCloudinary = await cloudinary.uploader.upload(
-        req.files.photoFromFront.tempFilePath    );
-      console.log("resultCloudinary côté back ",resultCloudinary)
-    const response = await axios.post(
-        "https://dress-me-up-backend-red.vercel.app/clothes/upload",
-        { url: resultCloudinary.secure_url }
-    );
+    const resultCloudinary = await cloudinary.uploader.upload(req.files.photoFromFront.tempFilePath);
 
-    res.json({ success: true, url: response.data.url });
+    res.json({ success: true, url: resultCloudinary.secure_url });
 } catch (error) {
     res.json({ success: false, error: error.message });
 }
