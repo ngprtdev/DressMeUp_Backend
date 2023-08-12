@@ -2,30 +2,36 @@ var express = require('express');
 var router = express.Router();
 const uniqid = require('uniqid');
 const axios = require("axios");
+const multer = require('multer');
+
 
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const Clothe = require('../models/clothes');
 
 // Pour ajout de la photo prise à l'écran CreatheClotheE
 // POST avec push en DB + ajout au store
-router.post('/upload', async (req, res)=> {
-  const photoPath = req.files.photoFromFront.tempFilePath
-  const resultMove = await req.files.photoFromFront.mv(photoPath);
- 
-  if(!resultMove) {
-    
-      const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+router.post('/upload', upload.single('photoFromFront'), async (req, res) => {
+  try {
+      const resultCloudinary = await cloudinary.uploader.upload(req.file.buffer, {
+          folder: 'dress-me-up', // Vous pouvez personnaliser le dossier sur Cloudinary
+          use_filename: true
+      });
 
-     
-      res.json({ result: true, url: resultCloudinary.secure_url });    }
-      else {
-    res.json({ result: false, error: resultMove });
+      // Supprimer le fichier temporaire
+      fs.unlinkSync(req.file.path);
+
+      res.json({ result: true, url: resultCloudinary.secure_url });
+  } catch (error) {
+      console.error('Error uploading to Cloudinary:', error);
+      res.status(500).json({ result: false, error: 'Upload failed' });
   }
-  fs.unlinkSync(photoPath);
+});
 
-})
 
 // Pour la page de finalisation de création du vêtement
 // POST avec push en DB + ajout au store
