@@ -7,26 +7,6 @@ const fs = require('fs');
 
 const Clothe = require('../models/clothes');
 
-// Pour ajout de la photo prise à l'écran CreatheClotheE
-// POST avec push en DB + ajout au store
-router.post('/upload', async (req, res) => {
-  try {
-      const photoURI = req.body.photoFromFront; // Récupérer l'URI directement depuis le corps de la requête
-
-      if (photoURI) {
-          const resultCloudinary = await cloudinary.uploader.upload(photoURI);
-
-          res.json({ result: true, url: resultCloudinary.secure_url });
-      } else {
-          res.status(400).json({ result: false, error: "No photo URI provided" });
-      }
-  } catch (error) {
-    console.error("req.body",req.body)
-    console.error("photoURI",photoURI)
-      res.status(500).json({ result: false, error: "An error occurred" });
-  }
-});
-
 // Pour la page de finalisation de création du vêtement
 // POST avec push en DB + ajout au store
 router.post('/', (req, res)=>{
