@@ -16,20 +16,14 @@ const Clothe = require('../models/clothes');
 // Pour ajout de la photo prise à l'écran CreatheClotheE
 // POST avec push en DB + ajout au store
 router.post('/upload', upload.single('photoFromFront'), async (req, res) => {
-  try {
-      const resultCloudinary = await cloudinary.uploader.upload(req.file.buffer, {
-          folder: 'dress-me-up', // Vous pouvez personnaliser le dossier sur Cloudinary
-          use_filename: true
-      });
+
+      const resultCloudinary = await cloudinary.uploader.upload( req.files.photoFromFront.tempFilePath);
       console.log("resultCloudinary", resultCloudinary)
       // Supprimer le fichier temporaire
       fs.unlinkSync(req.file.path);
 
       res.json({ result: true, url: resultCloudinary.secure_url });
-  } catch (error) {
-      console.error('Error uploading to Cloudinary:', error);
-      res.status(500).json({ result: false, error: 'Upload failed' });
-  }
+
 });
 
 
