@@ -21,8 +21,8 @@ router.post('/upload', async (req, res) => {
           res.status(400).json({ result: false, error: "No photo URI provided" });
       }
   } catch (error) {
-    console.log("req.body",req.body)
-    console.log("photoURI",photoURI)
+    console.error("req.body",req.body)
+    console.error("photoURI",photoURI)
       res.status(500).json({ result: false, error: "An error occurred" });
   }
 });
