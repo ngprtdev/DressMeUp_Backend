@@ -9,21 +9,24 @@ const Clothe = require('../models/clothes');
 
 // Pour ajout de la photo prise à l'écran CreatheClotheE
 // POST avec push en DB + ajout au store
-router.post('/upload', async (req, res)=> {
-    const photoPath = req.files.photoFromFront.tempFilePath
-   
-    if(photoPath) {
-      
-        const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+router.post('/upload', async (req, res) => {
+  const photoPath = req.files.photoFromFront.tempFilePath;
 
-       
-        res.json({ result: true, url: resultCloudinary.secure_url });    }
-        else {
-      res.json({ result: false, error: "Something went wrong" });
-    }
-    fs.unlinkSync(photoPath);
+  try {
+      if (photoPath) {
+          const resultCloudinary = await cloudinary.uploader.upload(photoPath);
 
-})
+          // Envoyer la réponse uniquement après avoir supprimé le fichier temporaire
+          fs.unlinkSync(photoPath);
+
+          res.json({ result: true, url: resultCloudinary.secure_url });
+      } else {
+          res.status(400).json({ result: false, error: "Something went wrong" });
+      }
+  } catch (error) {
+      res.status(500).json({ result: false, error: "An error occurred" });
+  }
+});
 
 // Pour la page de finalisation de création du vêtement
 // POST avec push en DB + ajout au store
