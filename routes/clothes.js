@@ -11,9 +11,8 @@ const Clothe = require('../models/clothes');
 // POST avec push en DB + ajout au store
 router.post('/upload', async (req, res)=> {
     const photoPath = req.files.photoFromFront.tempFilePath
-    const resultMove = await req.files.photoFromFront.mv(photoPath);
    
-    if(!resultMove) {
+    if(photoPath) {
       
         const resultCloudinary = await cloudinary.uploader.upload(photoPath);
 
