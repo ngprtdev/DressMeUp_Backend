@@ -18,15 +18,12 @@ router.post("/signup", (req, res) => {
     return;
   }
 
-  User.findOne({ username: req.body.username }).then((data) => {
-    if (data) {
-      // Username already exists in database
+  User.findOne({ username: req.body.username }).then((usernameFound) => {
+    if (usernameFound) {
       res.json({ result: false, error: "Username already exists" });
     } else {
-      User.findOne({ email: req.body.email }).then((email) => {
-        console.log(email)
-        if (email) {
-          // Email already exists in database
+      User.findOne({ email: req.body.email }).then((emailFound) => {
+        if (emailFound) {
           res.json({ result: false, error: "Email already exists" });
         } else {
           const hash = bcrypt.hashSync(req.body.password, 10);
@@ -43,9 +40,7 @@ router.post("/signup", (req, res) => {
         }
       });
     }
-  });
-  
-  
+  }); 
 });
 
 // Pour la page login / signin, connexion au compte
