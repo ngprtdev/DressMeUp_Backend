@@ -1,9 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const uniqid = require('uniqid');
-
-const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
 
 const Clothe = require('../models/clothes');
 
@@ -31,7 +27,6 @@ router.post('/', (req, res)=>{
             username: username,
           })
           newClothe.save().then(data => {
-              // console.log(data)
               res.json({ result: true, clothe: data })
           })
       }
