@@ -19,23 +19,33 @@ router.post("/signup", (req, res) => {
   }
 
   User.findOne({ username: req.body.username }).then((data) => {
-    if (data === null) {
-      const hash = bcrypt.hashSync(req.body.password, 10);
-      const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: hash,
-        token: uid2(32),
-      });
-
-      newUser.save().then((newDoc) => {
-        res.json({ result: true, token: newDoc.token });
-      });
+    if (data) {
+      // Username already exists in database
+      res.json({ result: false, error: "Username already exists" });
     } else {
-      // User already exists in database
-      res.json({ result: false, error: "User already exists" });
+      User.findOne({ email: req.body.email }).then((email) => {
+        console.log(email)
+        if (email) {
+          // Email already exists in database
+          res.json({ result: false, error: "Email already exists" });
+        } else {
+          const hash = bcrypt.hashSync(req.body.password, 10);
+          const newUser = new User({
+            username: req.body.username,
+            email: req.body.email,
+            password: hash,
+            token: uid2(32),
+          });
+  
+          newUser.save().then((newDoc) => {
+            res.json({ result: true, token: newDoc.token });
+          });
+        }
+      });
     }
   });
+  
+  
 });
 
 // Pour la page login / signin, connexion au compte
